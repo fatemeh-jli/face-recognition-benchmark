@@ -45,16 +45,15 @@ except Exception:
 
 ID_THRESHOLD = 0.37
 
-# ---------------------------------------------------------------------------
 # دوربین
-# ---------------------------------------------------------------------------
+
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH,  640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_BUFFERSIZE,   1)
 if not cap.isOpened():
     raise RuntimeError("Camera not found!")
-psutil.cpu_percent(interval=None)  # warm-up — اولین call همیشه 0 برمیگردونه
+psutil.cpu_percent(interval=None) 
 
 # ثابت‌های نمایش
 
@@ -67,9 +66,9 @@ WIN_H         = CAM_H
 C_BG        = (18,  18,  28)
 C_CARD      = (28,  28,  42)
 C_BORDER    = (60,  60,  80)
-C_GOLD      = (30,  210, 255)   # BGR → amber/gold
+C_GOLD      = (30,  210, 255)  
 C_GREEN     = (80,  220, 80)
-C_ORANGE    = (60,  165, 255)   # BGR → orange
+C_ORANGE    = (60,  165, 255)   
 C_WHITE     = (230, 230, 230)
 C_DIM       = (130, 130, 150)
 C_RED       = (70,  70,  220)
@@ -176,10 +175,9 @@ def run_insight(frame: np.ndarray) -> tuple[np.ndarray, dict]:
 
 
 def run_haar(frame: np.ndarray) -> tuple[np.ndarray, dict]:
-    """Haar Cascade inference — annotate و داده برمی‌گردونه."""
     t0   = time.perf_counter()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    cv2.equalizeHist(gray, gray)           # کنتراست بهتر
+    cv2.equalizeHist(gray, gray)         
     faces = haar.detectMultiScale(
         gray, scaleFactor=1.1, minNeighbors=5,
         minSize=(60, 60), flags=cv2.CASCADE_SCALE_IMAGE
@@ -196,7 +194,7 @@ def run_haar(frame: np.ndarray) -> tuple[np.ndarray, dict]:
         identity = "Face"
 
     for (x, y, w, h) in faces:
-        col = (200, 140, 0)   # آبی تیره — مستطیل کلاسیک برای Haar
+        col = (200, 140, 0)   
         cv2.rectangle(out, (x, y), (x + w, y + h), col, 2)
         _label_bg(out, "Face", x, y - 4, col)
 
@@ -289,7 +287,6 @@ def build_panel(d_ins: dict, d_haar: dict,
 
     for i, row in enumerate(rows):
 
-        # FIX مهم: جلوگیری از crash
         if len(row) != 3:
             continue
 
@@ -307,7 +304,6 @@ def build_panel(d_ins: dict, d_haar: dict,
     _hline(panel, y)
     y += 12
 
-    # ───── Speed bars ─────
     _txt(panel, "Speed bars (lower = better):", 12, y, C_DIM, 0.36)
     y += 16
 
@@ -326,10 +322,6 @@ def build_panel(d_ins: dict, d_haar: dict,
     return panel
 
 def make_split_frame(f_ins: np.ndarray, f_haar: np.ndarray) -> np.ndarray:
-    """
-    دو فریم رو بدون کشیدگی کنار هم قرار میده.
-    هر کدوم نصف ارتفاع — با نسبت تصویر درست.
-    """
     half_h = CAM_H // 2
     # crop مرکزی به نسبت صحیح
     def fit(img, tw, th):
