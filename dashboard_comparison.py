@@ -13,9 +13,9 @@ import psutil
 from insightface.app import FaceAnalysis
 from scipy.spatial.distance import cosine
 
-# ---------------------------------------------------------------------------
+
 # بارگذاری مدل‌ها
-# ---------------------------------------------------------------------------
+
 print("=" * 60)
 print("  FACE RECOGNITION BENCHMARK")
 print("  InsightFace (ArcFace) vs Haar Cascade")
@@ -31,9 +31,8 @@ haar = cv2.CascadeClassifier(
 )
 print("[INFO] All models ready.\n")
 
-# ---------------------------------------------------------------------------
 # پایگاه داده embedding
-# ---------------------------------------------------------------------------
+
 try:
     raw = np.load("fatemeh_db.npy")
     DATABASE = raw.reshape(-1, raw.shape[-1]) if raw.ndim > 1 else raw.reshape(1, -1)
@@ -56,9 +55,9 @@ cap.set(cv2.CAP_PROP_BUFFERSIZE,   1)
 if not cap.isOpened():
     raise RuntimeError("Camera not found!")
 psutil.cpu_percent(interval=None)  # warm-up — اولین call همیشه 0 برمیگردونه
-# ---------------------------------------------------------------------------
+
 # ثابت‌های نمایش
-# ---------------------------------------------------------------------------
+
 CAM_W, CAM_H = 640, 480
 PANEL_W       = 380
 WIN_W         = CAM_W + PANEL_W
@@ -79,13 +78,10 @@ C_CYAN      = (220, 220,  50)
 FONT        = cv2.FONT_HERSHEY_SIMPLEX
 AA          = cv2.LINE_AA
 
-# ---------------------------------------------------------------------------
 # ثابت‌های بنچمارک
-# ---------------------------------------------------------------------------
-INSIGHT_SKIP = 3  # FPS بالاتر میره
-# ---------------------------------------------------------------------------
-# وضعیت برنامه
-# ---------------------------------------------------------------------------
+
+INSIGHT_SKIP = 3 
+
 freeze_mode   = False
 results       = []
 show_msg      = 0
@@ -114,9 +110,7 @@ _last_ins_frame = None   # آخرین فریم annotate‌شده InsightFace
 print("Controls:  [S] Freeze & Save   [C] Clear   [R] Reset metrics   [Q] Quit\n")
 
 
-# ---------------------------------------------------------------------------
 # توابع کمکی
-# ---------------------------------------------------------------------------
 
 def get_identity(emb: np.ndarray) -> tuple[str, float]:
     if not DB_ENABLED or DATABASE.shape[0] == 0:
@@ -214,9 +208,7 @@ def run_haar(frame: np.ndarray) -> tuple[np.ndarray, dict]:
     }
 
 
-# ---------------------------------------------------------------------------
-# توابع رسم UI
-# ---------------------------------------------------------------------------
+#   UI
 
 def _draw_corner_box(img, x1, y1, x2, y2, color, length=20, thick=2):
     """کادر با گوشه‌های L-شکل — حرفه‌ای‌تر از مستطیل ساده."""
@@ -384,10 +376,9 @@ def save_results():
     return f"Saved {len(results)} result(s) → benchmark_results.txt"
 
 
-# ---------------------------------------------------------------------------
 # حلقه اصلی
-# ---------------------------------------------------------------------------
-last_ins_annotated = None   # آخرین فریم annotate InsightFace
+
+last_ins_annotated = None     
 
 while True:
     ret, raw = cap.read()
@@ -398,7 +389,6 @@ while True:
     fps_val = fps_tick()
 
     if not freeze_mode:
-        # Haar هر فریم — سریعه
         f_haar, d_haar = run_haar(raw)
         d_haar["fps"]  = fps_val
 
@@ -417,7 +407,6 @@ while True:
         live["haar"] = d_haar
 
     else:
-        # فریز: فریم زنده annotate میشه ولی جدول ثابته
         f_haar, _ = run_haar(raw)
         if frame_idx % INSIGHT_SKIP == 0 or last_ins_annotated is None:
             f_ins, _ = run_insight(raw)
@@ -427,7 +416,6 @@ while True:
 
     show = frozen if freeze_mode else live
 
-    # ساخت تصویر ترکیبی
     split  = make_split_frame(f_ins, f_haar)
     panel  = build_panel(show["ins"], show["haar"],
                          freeze_mode, len(results),
