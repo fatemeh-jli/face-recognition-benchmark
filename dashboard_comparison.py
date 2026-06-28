@@ -1,16 +1,4 @@
 """
-Face Recognition Benchmark System
-===================================
-InsightFace (Buffalo_L / ArcFace) vs Haar Cascade
-Real-time side-by-side comparison with academic metrics.
-
-Academic metrics tracked:
-  - Detection Rate (Sensitivity / Recall)
-  - False Positive Rate
-  - Average Inference Time (ms)
-  - FPS
-  - CPU usage
-
 Controls:
   [S]  Freeze & save snapshot
   [C]  Clear & unfreeze
