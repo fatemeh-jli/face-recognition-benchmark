@@ -1,0 +1,74 @@
+# ======================
+# Python cache
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ======================
+# Virtual Environment (VERY IMPORTANT)
+# ======================
+faceproj/
+venv/
+env/
+ENV/
+.venv/
+
+# ======================
+# Python packaging / builds
+# ======================
+build/
+dist/
+*.egg-info/
+
+# ======================
+# Logs & reports
+# ======================
+*.log
+*.csv
+*.sqlite
+*.db
+
+benchmark_raw.csv
+benchmark_results.txt
+benchmark_summary.json
+
+# ======================
+# IDE / Editor
+# ======================
+.vscode/
+.idea/
+
+# ======================
+# Jupyter (if any)
+# ======================
+.ipynb_checkpoints/
+
+# ======================
+# System files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Torch / ML heavy files
+# ======================
+*.pt
+*.pth
+*.onnx
+*.h5
+
+# ======================
+# zip / models / dumps
+# ======================
+*.zip
+*.tar
+*.gz
+
+# ======================
+# datasets / big files
+# ======================
+data/
+datasets/
+models/
+share/models/
